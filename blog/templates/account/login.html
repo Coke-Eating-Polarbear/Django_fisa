@@ -1,0 +1,24 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block page_area %}
+{% load crispy_forms_tags %}
+
+    <div class="row d-flex justify-content-center">
+            <div class="col-6">
+            Login
+                <br>
+                <form method="POST" class="mb-3">
+                    {% csrf_token %} {# 꼭 form 안에 들어있어야 합니다. #}
+                    {{ form |crispy}}
+
+                    {#  로그인 (유저네임/이메일/둘 다 허용): {{ form.login }}<br> #}
+                    {# - 비밀번호: {{ form.password }} #}
+                    <input type="submit" value="로그인">
+                </form>
+            </div>
+        <div>
+
+</body>
+</html>
+
+{% endblock %}

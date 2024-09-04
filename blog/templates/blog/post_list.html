@@ -1,0 +1,88 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block page_area %}
+
+<style>
+    .fixed-top-right {
+        position: fixed;
+        top: 10;
+        right: 0;
+        z-index: 999; 
+    }
+</style>
+    <div class="row d-flex justify-content-center">
+        <div class="col-1 offset-8">
+            {% if user.is_authenticated %}   
+                <a class="btn btn-secondary" href="{% url 'blog_app:create' %}" role="button">글쓰기</a>&nbsp;&nbsp;          
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+        {% for p in post_list %}
+        <div class="col-10">
+            <!-- bootstrap에서 card 가져오기 -->
+            <div class="card d-flex justify-content-between" style="width: 60rem;">
+                {% if p.head_image %}
+                <img src="{{ p.head_image.url}}" class="card-img-top" style="aspect-ratio: 10/1; object-fit: cover;" alt="...">
+                <!-- 장고는 이미지 업로드를 위한 ImageField를 제공함.  -->
+                {% endif %}
+                <div class="card-body">
+                <h5 class="card-title"><a href="{{ p.get_absolute_url }}">{{ p.title }}</a></h5>
+                <h6> {{ p.created_at }} </h6>
+                <p class="card-text">{{ p.content }}</p>
+                <div class="card-end"> 
+                <span>{{ p.author }}</span>
+                <a href="{{ p.get_absolute_url }}" class="btn btn-dark">더 보기</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+        <div class="widget col-2 fixed-top-right">
+            {% include 'blog/search_widget.html' %}
+        </div>
+    </div>
+    
+    <!-- 페이지네이션 -->
+    {# {% if page_obj.exists %} #} 
+    <nav aria-label="Page navigation" class="mb-15">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1" aria-label="First">
+                    <span aria-hidden="true">&laquo; 처음</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">이전</span>
+                </a>
+            </li>
+            {% endif %}
+
+            <li class="page-item disabled">
+                <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">다음</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                    <span aria-hidden="true">마지막 &raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    
+    {# {% else %} #}
+    {# {% endif %} #}
+
+
+{% endblock %}

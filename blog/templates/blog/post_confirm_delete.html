@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    정말 삭제하시겠습니까?
+
+
+
+    <form method="POST" action="{% url 'blog_app_delete' post.id %}">
+        {% csrf_token %}
+        <button type="submit">예</button>
+    </form>
+</body>
+</html>

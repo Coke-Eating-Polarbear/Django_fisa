@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About 김명준</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <style>
+        /* The navigation bar */
+            .navbar {
+            overflow: hidden;
+            background-color: #333;
+            position: fixed; /* Set the navbar to fixed position */
+            top: 0; /* Position the navbar at the top of the page */
+            width: 100%; /* Full width */
+            }
+
+    </style>
+</head>
+<body>
+
+<!-- Header-->
+<div id="header" class="py-5">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container px-5">
+            <a class="navbar-brand">MYEONGJUN KIM</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'blog_app:about_me' %}">About me</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'blog_app:post_list' %}">blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#three">Technical Editor</a></li>             
+                </ul>
+
+                {% if user.is_authenticated %}   
+                {# 로그인 상태이면 #}
+                    {# 본인 ID #}
+                    <span class="text-secondary fw-bold"> <a href="{% url 'account_change_password' %}">{{ user.username }} </a> </span>&nbsp;
+                    {# 로그아웃 버튼 #}
+                    <a class="btn btn-secondary" href="{% url 'account_logout' %}" role="button">로그아웃</a>&nbsp;&nbsp;
+                    {# 회원탈퇴 버튼 #}
+                    <a class="btn btn-secondary" href="{% url 'blog_app:user_delete' %}" role="button">회원탈퇴</a>&nbsp;&nbsp;
+                    
+                    {% else %}
+                {# 로그아웃 상태이면 #}
+                    {# 로그인 버튼 #}
+                    <a class="btn btn-secondary" href="{% url 'account_login' %}" role="button">로그인</a>&nbsp;&nbsp;
+                    {# 회원 가입 버튼 #}
+                    <a class="btn btn-secondary" href="{% url 'account_signup' %}" role="button">회원가입</a>&nbsp;&nbsp;
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+</div>
+
+{% block page_area %}
+
+{% endblock %}
+
+<!-- Footer-->
+<div id="footer" class="bg-dark py-4 mt-auto fixed-bottom">
+    <div class="container px-5">
+        <div class="row align-items-center justify-content-between flex-column flex-sm-row">
+            <div class="col-auto"><div class="small m-0 text-white">Copyright &copy; MYEONGJUN KIM 2024</div></div>
+            <div class="col-auto">
+                <span class="text-white mx-1">audwnssudden@naver.com</span>
+                <span class="text-white mx-1">&middot;</span>
+                <a class="link-light small" href="mailto:atangi@naver.com">Contact</a>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    Login
+    <br>
+    <form method="POST">
+        {% csrf_token %} {# 꼭 form 안에 들어있어야 합니다. #}
+        {{ form }}
+        <input type="submit" value="로그인">
+    </form>
+</body>
+</html>

@@ -1,0 +1,50 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block page_area %}
+<!-- Main-->
+<div id="main">
+
+    <div class="container px-5" id="one">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xxl-6">
+                <div class="text-center my-5">
+                    <h1 class="fw-bolder mb-3">얕고 넓은 지식을 깊고 넓은 지식으로 바꿔가는 개발자</h1>
+                    <p class="lead fw-normal text-muted mb-4">김명준입니다</p>
+                    <a class="btn btn-dark btn-lg" href="#scroll-target">WHO I AM</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+            <!-- About section one-->
+            <section class="py-5 bg-light about_me" id="scroll-target">
+                <div class="container px-5 my-5"  id="two">
+                    <div class="row gx-5 align-items-center">
+                        <!-- <div class="col-lg-6"><img class="img-fluid rounded mb-5 mb-lg-0" src="data/spongebob.jpg" alt="..." /></div> -->
+                        <div class="col-lg-6 order-first order-lg-last"><img class="img-fluid rounded mb-5 mb-lg-0" src="{% static 'data/spongebob.jpg' %}" alt="..." /></div>
+                        <div class="col-lg-6">
+                            <h2 class="fw-bolder">Programmer</h2>
+                            <p class="lead fw-normal text-muted mb-0">코드 리뷰를 즐겨하며<br>
+                                C언어를 좋아하는</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- About section two-->
+            <section class="py-5" id="three">
+                <div class="container px-5 my-5">
+                    <div class="row gx-5 align-items-center">
+                        <!-- <div class="col-lg-6 order-first order-lg-last"><img class="img-fluid rounded mb-5 mb-lg-0" src="data/profile.png" alt="..." /></div> -->
+                        <div class="col-lg-6 order-first order-lg-last"><img class="img-fluid rounded mb-5 mb-lg-0" src="{% static 'data/헤헤오둥이.png' %}" alt="..." /></div>
+
+                        <div class="col-lg-6">
+                            <h2 class="fw-bolder">Technical Editor</h2>
+                            <p class="lead fw-normal text-muted mb-0">뭘 넣을지는 모르겠습니다<br>추후에 추가하겠습니다<br> 오둥이 최고!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+</div>
+
+{% endblock %}

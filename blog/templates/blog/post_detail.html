@@ -1,0 +1,147 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block page_area %}
+{% load crispy_forms_tags %}
+
+{% if user.is_authenticated and user == post.author %}
+            <a class="btn btn-secondary" href="/blog/edit-post/{{ post.pk }}" role="button">수정</a>&nbsp;&nbsp;          
+            {# GET / POST 요청에 대한 return이 다른 경우임 #}
+            {# <a class="btn btn-secondary" href="/blog/delete-post/{{ post.pk }}" role="button">삭제</a>&nbsp;&nbsp;        #}
+            <!-- Button to open the modal -->
+            <a class="btn btn-danger" href="#" role="button" data-bs-toggle="modal" data-bs-target="#deleteModal">삭제</a>&nbsp;&nbsp;
+
+            <!-- The Modal -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">삭제 확인</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            정말 삭제하시겠습니까?
+                        </div>
+                        <div class="modal-footer">
+                            <form method="POST" action="{% url 'blog_app:delete' post.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">예</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">아니오</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                  {% endif %}
+
+                            <!-- Post content-->
+                            <article>
+                                <!-- Post header-->
+                                <header class="mb-4">
+                                    <!-- Post title-->
+                                    <h1 class="fw-bolder mb-1">{{ post.title }}</h1>
+                                    <!-- Post meta content-->
+                                    <div class="text-muted fst-italic mb-2">{{ post.created_at }}</div>
+                                    <!-- Post categories tag가 있는 글이면 해당 tag가 보여지도록 반복문으로 끄집어내주세요. post.tag.tag_name -->
+                                    {% if post.tag.exists %}
+                                        {% for tag in post.tag.all %}
+                                            <a class="badge bg-secondary text-decoration-none link-light" href="{{ tag.get_absolute_url }}">{{ tag.tag_name }} {{ tag.post_set.count }} </a>
+                                        {% endfor %}
+                                    {% endif %}
+                                </header>
+                                <!-- Preview image figure-->
+                                {% if post.header_img %}
+                                <figure class="mb-4">
+                                    <img class="img-fluid rounded" src="{{ post.header_img.url }}" alt="..." /></figure>
+                                {% endif %}
+                                    <!-- Post content-->
+                                <section class="mb-5">
+                                    <p class="fs-5 mb-4"> {{ post.content }}</p>
+                                    {% if post.file_upload %}
+                                    <a href="{{ post.file_upload.url }}" class="btn btn-dark">다운로드</a>
+                                    {% endif %}
+                                </section>
+
+                                <!-- Comment Form과 Comment CRUD를 사용하기 위한 항목 -->
+                                <section>
+                                    <div class="card bg-light"> 
+                                        <div class="card-body" id="comment-area">
+                                        <!-- Comments Form -->
+                                        <div class="card my-4">
+                                            <h5 class="card-header">댓글</h5>
+                                            <div class="card-body">
+                                                {% if user.is_authenticated %} {# /blog/29/create-comment #}
+                                                    <form id="comment-form" method="POST" action="{{ post.get_absolute_url }}/create-comment">
+                                                        {% csrf_token %}
+                                                        <div class="form-group">
+                                                            {{ comment_form | crispy }}
+                                                        </div>
+                                                        <button type="submit" class="btn btn-dark">등록</button>
+                                                    </form>
+                                                {% else %}
+                                                    <a role="button" class="btn btn-outline-dark btn-block btn-sm" href="#" data-toggle="modal" data-target="#loginModal">Log in and leave a comment</a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                
+                                        {% if post.comment_set.exists %}
+                                            {% for comment in post.comment_set.iterator %}
+                                                <!-- Single Comment -->
+                                                <div class="d-flex align-items-center" id="comment-{{ comment.pk }}">
+                                                    <div class="flex-grow-1 ms-3">
+                                                        {% if user.is_authenticated and comment.author == user %}
+                                                            <div class="float-right">
+                                                                <a role="button"
+                                                                   class="btn btn-sm btn-secondary"
+                                                                   id="comment-{{ comment.pk }}-update-btn"
+                                                                   href="/blog/update-comment/{{ comment.pk }}">
+                                                                    수정
+                                                                </a>
+                                                                <a role="button"
+                                                                   href="#"
+                                                                   id="comment-{{ comment.pk }}-delete-modal-btn"
+                                                                   class="btn btn-sm btn-danger"
+                                                                   data-bs-toggle="modal" data-bs-target="#deleteCommentModal-{{ comment.pk }}">
+                                                                    삭제
+                                                                </a>
+                                                            </div>
+                                
+                                                            <!-- Modal -->
+                                                            <div class="modal fade" id="deleteCommentModal-{{ comment.pk }}" tabindex="-1" role="dialog" aria-labelledby="deleteCommentModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog" role="document">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title" id="deleteCommentModalLabel">정말 삭제하나요?</h5>
+                                                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <del>{{ comment | linebreaks }}</del>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                                                                            <a role="button" class="btn btn-danger" href="/blog/delete-comment/{{ comment.pk }}/">삭제</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                
+                                                        {% endif %}
+                                                        <h5 class="mt-0">
+                                                            {{ comment.author.username }}
+                                                            &nbsp;&nbsp;<small class="text-muted">{{ comment.created_at }}</small>
+                                                        </h5>
+                                                        <p>{{ comment.content | linebreaks }}</p>
+                                                        {% if comment.created_at != comment.updated_at %}
+                                                            <p class="text-muted float-right"><small>Updated: {{ comment.updated_at }}</small></p>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </section>
+
+                            </article>
+{% endblock %}
